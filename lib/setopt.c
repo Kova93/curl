@@ -597,7 +597,7 @@ CURLcode Curl_vsetopt(struct Curl_easy *data, CURLoption option, va_list param)
     /*
      * Set to make us do MIME/form POST
      */
-    result = Curl_mime_set_subparts(&data->set.mimepost,
+    result = Curl_mime_set_subparts(&data->set.mimedata,
                                     va_arg(param, curl_mime *), FALSE);
     if(!result) {
       data->set.httpreq = HTTPREQ_POST_MIME;

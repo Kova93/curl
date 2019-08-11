@@ -540,23 +540,23 @@ static CURLcode smtp_perform_mail(struct connectdata *conn)
   }
 
   /* Prepare the mime data if some. */
-  if(data->set.mimepost.kind != MIMEKIND_NONE) {
+  if(data->set.mimedata.kind != MIMEKIND_NONE) {
     /* Use the whole structure as data. */
-    data->set.mimepost.flags &= ~MIME_BODY_ONLY;
+    data->set.mimedata.flags &= ~MIME_BODY_ONLY;
 
     /* Add external headers and mime version. */
-    curl_mime_headers(&data->set.mimepost, data->set.headers, 0);
-    result = Curl_mime_prepare_headers(&data->set.mimepost, NULL,
+    curl_mime_headers(&data->set.mimedata, data->set.headers, 0);
+    result = Curl_mime_prepare_headers(&data->set.mimedata, NULL,
                                        NULL, MIMESTRATEGY_MAIL);
 
     if(!result)
       if(!Curl_checkheaders(conn, "Mime-Version"))
-        result = Curl_mime_add_header(&data->set.mimepost.curlheaders,
+        result = Curl_mime_add_header(&data->set.mimedata.curlheaders,
                                       "Mime-Version: 1.0");
 
     /* Make sure we will read the entire mime structure. */
     if(!result)
-      result = Curl_mime_rewind(&data->set.mimepost);
+      result = Curl_mime_rewind(&data->set.mimedata);
 
     if(result) {
       free(from);
@@ -564,11 +564,11 @@ static CURLcode smtp_perform_mail(struct connectdata *conn)
       return result;
     }
 
-    data->state.infilesize = Curl_mime_size(&data->set.mimepost);
+    data->state.infilesize = Curl_mime_size(&data->set.mimedata);
 
     /* Read from mime structure. */
     data->state.fread_func = (curl_read_callback) Curl_mime_read;
-    data->state.in = (void *) &data->set.mimepost;
+    data->state.in = (void *) &data->set.mimedata;
   }
 
   /* Calculate the optional SIZE parameter */
@@ -1202,7 +1202,7 @@ static CURLcode smtp_done(struct connectdata *conn, CURLcode status,
     result = status;         /* use the already set error code */
   }
   else if(!data->set.connect_only && data->set.mail_rcpt &&
-          (data->set.upload || data->set.mimepost.kind)) {
+          (data->set.upload || data->set.mimedata.kind)) {
     /* Calculate the EOB taking into account any terminating CRLF from the
        previous line of the email or the CRLF of the DATA command when there
        is "no mail data". RFC-5321, sect. 4.1.1.4.
@@ -1289,7 +1289,7 @@ static CURLcode smtp_perform(struct connectdata *conn, bool *connected,
   smtp->eob = 2;
 
   /* Start the first command in the DO phase */
-  if((data->set.upload || data->set.mimepost.kind) && data->set.mail_rcpt)
+  if((data->set.upload || data->set.mimedata.kind) && data->set.mail_rcpt)
     /* MAIL transfer */
     result = smtp_perform_mail(conn);
   else

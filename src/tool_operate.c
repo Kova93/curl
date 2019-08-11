@@ -1254,10 +1254,10 @@ static CURLcode create_transfers(struct GlobalConfig *global,
                     config->postfieldsize);
           break;
         case HTTPREQ_MIMEPOST:
-          result = tool2curlmime(curl, config->mimeroot, &config->mimepost);
+          result = tool2curlmime(curl, config->mimeroot, &config->mimedata);
           if(result)
             goto show_error;
-          my_setopt_mimepost(curl, CURLOPT_MIMEPOST, config->mimepost);
+          my_setopt_mimepost(curl, CURLOPT_MIMEPOST, config->mimedata);
           break;
         default:
           break;

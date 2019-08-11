@@ -94,7 +94,7 @@ CURLcode tool_setopt_bitmask(CURL *curl, struct GlobalConfig *config,
                              const NameValueUnsigned *nv, long lval);
 CURLcode tool_setopt_mimepost(CURL *curl, struct GlobalConfig *config,
                               const char *name, CURLoption tag,
-                              curl_mime *mimepost);
+                              curl_mime *mimedata);
 CURLcode tool_setopt_slist(CURL *curl, struct GlobalConfig *config,
                            const char *name, CURLoption tag,
                            struct curl_slist *list);

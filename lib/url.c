@@ -290,7 +290,7 @@ void Curl_freeset(struct Curl_easy *data)
   }
   data->change.url = NULL;
 
-  Curl_mime_cleanpart(&data->set.mimepost);
+  Curl_mime_cleanpart(&data->set.mimedata);
 }
 
 /* free the URL pieces */
@@ -464,7 +464,7 @@ CURLcode Curl_init_userdefined(struct Curl_easy *data)
   /* make libcurl quiet by default: */
   set->hide_progress = TRUE;  /* CURLOPT_NOPROGRESS changes these */
 
-  Curl_mime_initpart(&set->mimepost, data);
+  Curl_mime_initpart(&set->mimedata, data);
 
   /*
    * libcurl 7.10 introduced SSL verification *by default*! This needs to be

@@ -737,32 +737,32 @@ static CURLcode imap_perform_append(struct connectdata *conn)
   }
 
   /* Prepare the mime data if some. */
-  if(data->set.mimepost.kind != MIMEKIND_NONE) {
+  if(data->set.mimedata.kind != MIMEKIND_NONE) {
     /* Use the whole structure as data. */
-    data->set.mimepost.flags &= ~MIME_BODY_ONLY;
+    data->set.mimedata.flags &= ~MIME_BODY_ONLY;
 
     /* Add external headers and mime version. */
-    curl_mime_headers(&data->set.mimepost, data->set.headers, 0);
-    result = Curl_mime_prepare_headers(&data->set.mimepost, NULL,
+    curl_mime_headers(&data->set.mimedata, data->set.headers, 0);
+    result = Curl_mime_prepare_headers(&data->set.mimedata, NULL,
                                        NULL, MIMESTRATEGY_MAIL);
 
     if(!result)
       if(!Curl_checkheaders(conn, "Mime-Version"))
-        result = Curl_mime_add_header(&data->set.mimepost.curlheaders,
+        result = Curl_mime_add_header(&data->set.mimedata.curlheaders,
                                       "Mime-Version: 1.0");
 
     /* Make sure we will read the entire mime structure. */
     if(!result)
-      result = Curl_mime_rewind(&data->set.mimepost);
+      result = Curl_mime_rewind(&data->set.mimedata);
 
     if(result)
       return result;
 
-    data->state.infilesize = Curl_mime_size(&data->set.mimepost);
+    data->state.infilesize = Curl_mime_size(&data->set.mimedata);
 
     /* Read from mime structure. */
     data->state.fread_func = (curl_read_callback) Curl_mime_read;
-    data->state.in = (void *) &data->set.mimepost;
+    data->state.in = (void *) &data->set.mimedata;
   }
 
   /* Check we know the size of the upload */
@@ -1473,10 +1473,10 @@ static CURLcode imap_done(struct connectdata *conn, CURLcode status,
   }
   else if(!data->set.connect_only && !imap->custom &&
           (imap->uid || imap->mindex || data->set.upload ||
-          data->set.mimepost.kind != MIMEKIND_NONE)) {
+          data->set.mimedata.kind != MIMEKIND_NONE)) {
     /* Handle responses after FETCH or APPEND transfer has finished */
 
-    if(!data->set.upload && data->set.mimepost.kind == MIMEKIND_NONE)
+    if(!data->set.upload && data->set.mimedata.kind == MIMEKIND_NONE)
       state(conn, IMAP_FETCH_FINAL);
     else {
       /* End the APPEND command first by sending an empty line */
@@ -1542,7 +1542,7 @@ static CURLcode imap_perform(struct connectdata *conn, bool *connected,
     selected = TRUE;
 
   /* Start the first command in the DO phase */
-  if(conn->data->set.upload || data->set.mimepost.kind != MIMEKIND_NONE)
+  if(conn->data->set.upload || data->set.mimedata.kind != MIMEKIND_NONE)
     /* APPEND can be executed directly */
     result = imap_perform_append(conn);
   else if(imap->custom && (selected || !imap->mailbox))

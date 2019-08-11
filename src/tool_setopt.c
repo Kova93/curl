@@ -579,9 +579,9 @@ nomem:
 /* setopt wrapper for CURLOPT_MIMEPOST */
 CURLcode tool_setopt_mimepost(CURL *curl, struct GlobalConfig *config,
                               const char *name, CURLoption tag,
-                              curl_mime *mimepost)
+                              curl_mime *mimedata)
 {
-  CURLcode ret = curl_easy_setopt(curl, tag, mimepost);
+  CURLcode ret = curl_easy_setopt(curl, tag, mimedata);
   int mimeno = 0;
 
   if(!ret && config->libcurl) {

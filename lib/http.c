@@ -2197,7 +2197,7 @@ CURLcode Curl_http(struct connectdata *conn, bool *done)
 
   switch(httpreq) {
   case HTTPREQ_POST_MIME:
-    http->sendit = &data->set.mimepost;
+    http->sendit = &data->set.mimedata;
     break;
   case HTTPREQ_POST_FORM:
     /* Convert the form structure into a mime structure. */

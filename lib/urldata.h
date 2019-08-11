@@ -1598,7 +1598,7 @@ struct UserDefined {
   struct curl_slist *headers; /* linked list of extra headers */
   struct curl_slist *proxyheaders; /* linked list of extra CONNECT headers */
   struct curl_httppost *httppost;  /* linked list of old POST data */
-  curl_mimepart mimepost;  /* MIME/POST data. */
+  curl_mimepart mimedata;  /* MIME data. */
   struct curl_slist *quote;     /* after connection is established */
   struct curl_slist *postquote; /* after the transfer */
   struct curl_slist *prequote; /* before the transfer, after type */

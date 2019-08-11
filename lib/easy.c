@@ -763,7 +763,7 @@ static CURLcode dupset(struct Curl_easy *dst, struct Curl_easy *src)
   /* Copy src->set into dst->set first, then deal with the strings
      afterwards */
   dst->set = src->set;
-  Curl_mime_initpart(&dst->set.mimepost, dst);
+  Curl_mime_initpart(&dst->set.mimedata, dst);
 
   /* clear all string pointers first */
   memset(dst->set.str, 0, STRING_LAST * sizeof(char *));
@@ -788,7 +788,7 @@ static CURLcode dupset(struct Curl_easy *dst, struct Curl_easy *src)
   }
 
   /* Duplicate mime data. */
-  result = Curl_mime_duppart(&dst->set.mimepost, &src->set.mimepost);
+  result = Curl_mime_duppart(&dst->set.mimedata, &src->set.mimedata);
 
   if(src->set.resolve)
     dst->change.resolve = dst->set.resolve;
