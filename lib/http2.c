@@ -2092,6 +2092,7 @@ static ssize_t http2_send(struct connectdata *conn, int sockindex,
   case HTTPREQ_POST_FORM:
   case HTTPREQ_POST_MIME:
   case HTTPREQ_PUT:
+  case HTTPREQ_PUT_MIME:
     if(conn->data->state.infilesize != -1)
       stream->upload_left = conn->data->state.infilesize;
     else

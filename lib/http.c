@@ -459,6 +459,7 @@ static CURLcode http_perhapsrewind(struct connectdata *conn)
       break;
     case HTTPREQ_POST_FORM:
     case HTTPREQ_POST_MIME:
+    case HTTPREQ_PUT_MIME:
       expectsend = http->postsize;
       break;
     default:
@@ -1857,7 +1858,8 @@ CURLcode Curl_add_custom_headers(struct connectdata *conn,
                   /* this header (extended by formdata.c) is sent later */
                   checkprefix("Content-Type:", compare))
             ;
-          else if(data->set.httpreq == HTTPREQ_POST_MIME &&
+          else if((data->set.httpreq == HTTPREQ_POST_MIME ||
+                   data->set.httpreq == HTTPREQ_PUT_MIME) &&
                   /* this header is sent later */
                   checkprefix("Content-Type:", compare))
             ;
@@ -2087,6 +2089,7 @@ CURLcode Curl_http(struct connectdata *conn, bool *done)
         request = "POST";
         break;
       case HTTPREQ_PUT:
+      case HTTPREQ_PUT_MIME:
         request = "PUT";
         break;
       case HTTPREQ_OPTIONS:
@@ -2197,6 +2200,7 @@ CURLcode Curl_http(struct connectdata *conn, bool *done)
 
   switch(httpreq) {
   case HTTPREQ_POST_MIME:
+  case HTTPREQ_PUT_MIME:
     http->sendit = &data->set.mimedata;
     break;
   case HTTPREQ_POST_FORM:
@@ -2247,8 +2251,8 @@ CURLcode Curl_http(struct connectdata *conn, bool *done)
   }
   else {
     if((conn->handler->protocol & PROTO_FAMILY_HTTP) &&
-       (((httpreq == HTTPREQ_POST_MIME || httpreq == HTTPREQ_POST_FORM) &&
-         http->postsize < 0) ||
+       (((httpreq == HTTPREQ_POST_MIME || httpreq == HTTPREQ_POST_FORM ||
+          httpreq == HTTPREQ_PUT_MIME) && http->postsize < 0) ||
         ((data->set.upload || httpreq == HTTPREQ_POST) &&
          data->state.infilesize == -1))) {
       if(conn->bits.authneg)
@@ -2785,6 +2789,7 @@ CURLcode Curl_http(struct connectdata *conn, bool *done)
 
   case HTTPREQ_POST_FORM:
   case HTTPREQ_POST_MIME:
+  case HTTPREQ_PUT_MIME:
     /* This is form posting using mime data. */
     if(conn->bits.authneg) {
       /* nothing to post! */
@@ -2795,7 +2800,8 @@ CURLcode Curl_http(struct connectdata *conn, bool *done)
       result = Curl_add_buffer_send(&req_buffer, conn,
                                     &data->info.request_size, 0, FIRSTSOCKET);
       if(result)
-        failf(data, "Failed sending POST request");
+        failf(data, httpreq == HTTPREQ_PUT_MIME ?
+              "Failed sending PUT request" : "Failed sending POST request");
       else
         /* setup variables for the upcoming transfer */
         Curl_setup_transfer(data, FIRSTSOCKET, -1, TRUE, -1);
@@ -2865,7 +2871,8 @@ CURLcode Curl_http(struct connectdata *conn, bool *done)
     result = Curl_add_buffer_send(&req_buffer, conn,
                                   &data->info.request_size, 0, FIRSTSOCKET);
     if(result)
-      failf(data, "Failed sending POST request");
+      failf(data, httpreq == HTTPREQ_PUT_MIME ?
+            "Failed sending PUT request" : "Failed sending POST request");
     else
       /* prepare for transfer */
       Curl_setup_transfer(data, FIRSTSOCKET, -1, TRUE,
@@ -3538,6 +3545,7 @@ CURLcode Curl_http_readwrite_headers(struct Curl_easy *data,
           case HTTPREQ_POST:
           case HTTPREQ_POST_FORM:
           case HTTPREQ_POST_MIME:
+          case HTTPREQ_PUT_MIME:
             /* We got an error response. If this happened before the whole
              * request body has been sent we stop sending and mark the
              * connection for closure after we've read the entire response.

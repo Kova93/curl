@@ -605,6 +605,26 @@ CURLcode Curl_vsetopt(struct Curl_easy *data, CURLoption option, va_list param)
     }
     break;
 
+  case CURLOPT_MIMEPUT:
+    /*
+     * Set to make us do MIME/form PUT
+     */
+    result = Curl_mime_set_subparts(&data->set.mimedata,
+                                    va_arg(param, curl_mime *), FALSE);
+    if(!result) {
+      data->set.httpreq = HTTPREQ_PUT_MIME;
+      data->set.opt_no_body = FALSE; /* this is implied */
+    }
+    break;
+
+  case CURLOPT_MIMEDATA:
+    /*
+     * Set the MIME data
+     */
+    result = Curl_mime_set_subparts(&data->set.mimedata,
+                                    va_arg(param, curl_mime *), FALSE);
+    break;
+
   case CURLOPT_REFERER:
     /*
      * String to set in the HTTP Referer: field.

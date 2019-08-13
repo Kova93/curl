@@ -1868,64 +1868,70 @@ typedef enum {
   /* Post MIME data. */
   CINIT(MIMEPOST, OBJECTPOINT, 269),
 
+  /* Put MIME data. */
+  CINIT(MIMEPUT, OBJECTPOINT, 270),
+
+  /* Set MIME data. */
+  CINIT(MIMEDATA, OBJECTPOINT, 271),
+
   /* Time to use with the CURLOPT_TIMECONDITION. Specified in number of
      seconds since 1 Jan 1970. */
-  CINIT(TIMEVALUE_LARGE, OFF_T, 270),
+  CINIT(TIMEVALUE_LARGE, OFF_T, 272),
 
   /* Head start in milliseconds to give happy eyeballs. */
-  CINIT(HAPPY_EYEBALLS_TIMEOUT_MS, LONG, 271),
+  CINIT(HAPPY_EYEBALLS_TIMEOUT_MS, LONG, 273),
 
   /* Function that will be called before a resolver request is made */
-  CINIT(RESOLVER_START_FUNCTION, FUNCTIONPOINT, 272),
+  CINIT(RESOLVER_START_FUNCTION, FUNCTIONPOINT, 274),
 
   /* User data to pass to the resolver start callback. */
-  CINIT(RESOLVER_START_DATA, OBJECTPOINT, 273),
+  CINIT(RESOLVER_START_DATA, OBJECTPOINT, 275),
 
   /* send HAProxy PROXY protocol header? */
-  CINIT(HAPROXYPROTOCOL, LONG, 274),
+  CINIT(HAPROXYPROTOCOL, LONG, 276),
 
   /* shuffle addresses before use when DNS returns multiple */
-  CINIT(DNS_SHUFFLE_ADDRESSES, LONG, 275),
+  CINIT(DNS_SHUFFLE_ADDRESSES, LONG, 277),
 
   /* Specify which TLS 1.3 ciphers suites to use */
-  CINIT(TLS13_CIPHERS, STRINGPOINT, 276),
-  CINIT(PROXY_TLS13_CIPHERS, STRINGPOINT, 277),
+  CINIT(TLS13_CIPHERS, STRINGPOINT, 278),
+  CINIT(PROXY_TLS13_CIPHERS, STRINGPOINT, 279),
 
   /* Disallow specifying username/login in URL. */
-  CINIT(DISALLOW_USERNAME_IN_URL, LONG, 278),
+  CINIT(DISALLOW_USERNAME_IN_URL, LONG, 280),
 
   /* DNS-over-HTTPS URL */
-  CINIT(DOH_URL, STRINGPOINT, 279),
+  CINIT(DOH_URL, STRINGPOINT, 281),
 
   /* Preferred buffer size to use for uploads */
-  CINIT(UPLOAD_BUFFERSIZE, LONG, 280),
+  CINIT(UPLOAD_BUFFERSIZE, LONG, 282),
 
   /* Time in ms between connection upkeep calls for long-lived connections. */
-  CINIT(UPKEEP_INTERVAL_MS, LONG, 281),
+  CINIT(UPKEEP_INTERVAL_MS, LONG, 283),
 
   /* Specify URL using CURL URL API. */
-  CINIT(CURLU, OBJECTPOINT, 282),
+  CINIT(CURLU, OBJECTPOINT, 284),
 
   /* add trailing data just after no more data is available */
-  CINIT(TRAILERFUNCTION, FUNCTIONPOINT, 283),
+  CINIT(TRAILERFUNCTION, FUNCTIONPOINT, 285),
 
   /* pointer to be passed to HTTP_TRAILER_FUNCTION */
-  CINIT(TRAILERDATA, OBJECTPOINT, 284),
+  CINIT(TRAILERDATA, OBJECTPOINT, 286),
 
   /* set this to 1L to allow HTTP/0.9 responses or 0L to disallow */
-  CINIT(HTTP09_ALLOWED, LONG, 285),
+  CINIT(HTTP09_ALLOWED, LONG, 287),
 
   /* alt-svc control bitmask */
-  CINIT(ALTSVC_CTRL, LONG, 286),
+  CINIT(ALTSVC_CTRL, LONG, 288),
 
   /* alt-svc cache file name to possibly read from/write to */
-  CINIT(ALTSVC, STRINGPOINT, 287),
+  CINIT(ALTSVC, STRINGPOINT, 289),
 
   /* maximum age of a connection to consider it for reuse (in seconds) */
-  CINIT(MAXAGE_CONN, LONG, 288),
+  CINIT(MAXAGE_CONN, LONG, 290),
 
   /* SASL authorisation identity */
-  CINIT(SASL_AUTHZID, STRINGPOINT, 289),
+  CINIT(SASL_AUTHZID, STRINGPOINT, 291),
 
   CURLOPT_LASTENTRY /* the last unused */
 } CURLoption;

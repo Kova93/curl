@@ -711,6 +711,7 @@ static CURLcode http_request(struct connectdata *conn, const void *mem,
   case HTTPREQ_POST_FORM:
   case HTTPREQ_POST_MIME:
   case HTTPREQ_PUT:
+  case HTTPREQ_PUT_MIME:
     if(data->state.infilesize != -1)
       stream->upload_left = data->state.infilesize;
     else
